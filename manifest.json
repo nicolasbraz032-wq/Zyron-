@@ -1,0 +1,9 @@
+{
+  "name": "Zyron Studio 3.5",
+  "short_name": "Zyron",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#07101c",
+  "theme_color": "#07101c",
+  "description": "Zyron Studio 3.5 — plataforma de gestão empresarial"
+}
