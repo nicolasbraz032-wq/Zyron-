@@ -1,28 +1,35 @@
-const CACHE = "zyron-3-5-v1";
+const CACHE_NAME = "zyron-v1";
 
-const ASSETS = [
+const FILES_TO_CACHE = [
   "./",
   "./index.html",
   "./manifest.json"
 ];
 
-self.addEventListener("install", event => {
+self.addEventListener("install", (event) => {
   event.waitUntil(
-    caches.open(CACHE).then(cache => cache.addAll(ASSETS))
+    caches.open(CACHE_NAME).then((cache) => {
+      return cache.addAll(FILES_TO_CACHE);
+    })
   );
-  self.skipWaiting();
 });
 
-self.addEventListener("activate", event => {
-  event.waitUntil(self.clients.claim());
+self.addEventListener("activate", (event) => {
+  event.waitUntil(
+    caches.keys().then((keys) =>
+      Promise.all(
+        keys
+          .filter((key) => key !== CACHE_NAME)
+          .map((key) => caches.delete(key))
+      )
+    )
+  );
 });
 
-self.addEventListener("fetch", event => {
-  if (event.request.method !== "GET") return;
-
+self.addEventListener("fetch", (event) => {
   event.respondWith(
-    caches.match(event.request).then(cached => {
-      return cached || fetch(event.request);
+    caches.match(event.request).then((response) => {
+      return response || fetch(event.request);
     })
   );
 });
