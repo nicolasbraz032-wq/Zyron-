@@ -1,0 +1,446 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Zyron Studio 2.0</title>
+<style>
+:root{
+ --bg:#05060a;--panel:rgba(15,18,29,.78);--panel2:#0b0e17;--line:rgba(255,255,255,.09);
+ --text:#f8fafc;--muted:#94a3b8;--purple:#8b5cf6;--cyan:#22d3ee;--glow:rgba(139,92,246,.28)
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+ margin:0;color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+ background:
+ radial-gradient(circle at 15% 0%,rgba(124,58,237,.18),transparent 30%),
+ radial-gradient(circle at 90% 15%,rgba(34,211,238,.10),transparent 25%),
+ linear-gradient(180deg,#05060a 0%,#080a11 55%,#05060a 100%);
+ min-height:100vh
+}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.22;background-image:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-size:48px 48px}
+header{
+ height:76px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;
+ padding:0 5%;background:rgba(5,6,10,.78);backdrop-filter:blur(18px);position:sticky;top:0;z-index:50
+}
+.logo{font-size:27px;font-weight:950;letter-spacing:-1.5px}.logo span{color:var(--purple)}
+nav{display:flex;gap:4px;overflow:auto}nav button{background:transparent;border:0;color:#aeb8ca;padding:10px 12px;border-radius:9px;cursor:pointer;font-weight:650;white-space:nowrap}nav button:hover{background:#111522;color:white}
+.container{max-width:1240px;margin:auto;padding:42px 24px}
+.hero{text-align:center;padding:48px 0 58px}.badge{display:inline-flex;align-items:center;gap:7px;padding:8px 13px;border:1px solid rgba(139,92,246,.35);border-radius:999px;color:#d8ccff;background:rgba(76,29,149,.16);font-size:12px;font-weight:800;box-shadow:0 0 35px rgba(139,92,246,.12)}
+h1{font-size:clamp(43px,7vw,78px);line-height:.98;letter-spacing:-4px;max-width:980px;margin:23px auto 20px}.gradient{background:linear-gradient(100deg,#a78bfa,#22d3ee);background-clip:text;color:transparent}
+.hero p{max-width:760px;margin:auto;color:var(--muted);font-size:18px;line-height:1.7}
+.actions{margin-top:30px;display:flex;justify-content:center;gap:12px;flex-wrap:wrap}
+.btn{padding:12px 17px;border-radius:11px;font-weight:800;cursor:pointer;transition:.18s transform,.18s box-shadow}.btn:hover{transform:translateY(-1px)}
+.primary{background:linear-gradient(135deg,#8b5cf6,#6d4aff);color:#fff;border:1px solid rgba(255,255,255,.1);box-shadow:0 10px 30px var(--glow)}
+.secondary{background:rgba(18,23,35,.9);color:#e7eaf2;border:1px solid #283247}.secondary:hover{border-color:#48556f}
+.section{padding:38px 0}.title{text-align:center;margin-bottom:25px}.title h2{font-size:34px;margin:0 0 8px;letter-spacing:-1px}.title p{color:var(--muted)}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:16px}
+.card,.panel{
+ background:linear-gradient(145deg,rgba(16,20,32,.88),rgba(10,13,21,.88));
+ border:1px solid var(--line);border-radius:18px;padding:21px;box-shadow:0 16px 45px rgba(0,0,0,.16)
+}
+.card{transition:.2s transform,.2s border-color}.card:hover{transform:translateY(-3px);border-color:rgba(139,92,246,.35)}
+.card .ico{font-size:29px}.card h3{margin:12px 0 7px}.card p{color:var(--muted);line-height:1.55;margin:0}
+.editor{display:grid;grid-template-columns:330px 1fr;gap:20px}.panel h2{margin-top:0;letter-spacing:-.5px}
+label{display:block;color:#d7deeb;margin:14px 0 6px;font-size:13px;font-weight:700}
+input,select,textarea{width:100%;background:#080b12;border:1px solid #293348;color:#fff;border-radius:10px;padding:12px;outline:none}
+input:focus,select:focus,textarea:focus{border-color:#7655e8;box-shadow:0 0 0 3px rgba(139,92,246,.12)}textarea{min-height:75px;resize:vertical}.full{width:100%;margin-top:12px}
+.preview{background:#fff;color:#111827;border-radius:16px;overflow:hidden;min-height:630px;box-shadow:0 25px 70px rgba(0,0,0,.3)}
+.preview-head{display:flex;align-items:center;justify-content:space-between;padding:18px 25px;border-bottom:1px solid #e5e7eb}.preview-logo{font-weight:950}.preview-nav{color:#6b7280}
+.hero-img{height:280px;background-size:cover;background-position:center;display:flex;align-items:center;padding:38px;color:#fff}.hero-img h2{font-size:45px;letter-spacing:-2px;margin:0 0 9px}.hero-img p{max-width:590px;line-height:1.55}.site-btn{display:inline-block;color:#fff;padding:11px 16px;border-radius:9px;font-weight:800}
+.site-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;padding:25px}.site-box{border:1px solid #e1e5ea;border-radius:12px;padding:17px}.site-box p{color:#697386;line-height:1.5}
+.msgs{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}.msg{background:linear-gradient(145deg,#0e121d,#0a0d15);border:1px solid var(--line);border-radius:17px;padding:18px}.msg textarea{min-height:125px}.copy{margin-top:9px;width:100%}
+.price{font-size:34px;font-weight:950;letter-spacing:-1px}.small{color:var(--muted);font-size:12px;line-height:1.5}
+.notice{padding:13px 15px;border:1px solid #2a3447;border-radius:11px;background:rgba(10,14,23,.8);color:#aeb7c9;margin-top:12px}.success{color:#83e5a0}
+footer{text-align:center;color:#69748a;border-top:1px solid var(--line);padding:32px;margin-top:40px}
+.hidden{display:none!important}
+@media(max-width:850px){header{padding:0 18px}.editor{grid-template-columns:1fr}.preview-nav{display:none}.site-grid{grid-template-columns:1fr}.hero-img h2{font-size:34px}h1{letter-spacing:-2.5px}.container{padding:25px 15px}}
+</style>
+<style>
+.infoGroup{margin-top:18px;padding:16px;border:1px solid rgba(255,255,255,.07);border-radius:15px;background:rgba(8,11,18,.65)}
+.infoTitle{display:flex;align-items:center;gap:11px;margin-bottom:13px}.infoTitle>span{width:36px;height:36px;display:grid;place-items:center;border-radius:10px;background:linear-gradient(135deg,rgba(139,92,246,.22),rgba(34,211,238,.10));font-size:18px}
+.infoTitle b{display:block;font-size:14px}.infoTitle small{display:block;color:#718096;font-size:11px;margin-top:3px}.infoGroup label{margin-top:12px}
+.infoGroup input,.infoGroup select,.infoGroup textarea{background:#070a11}.infoGroup input:focus,.infoGroup select:focus,.infoGroup textarea:focus{border-color:#8b5cf6}
+input[type=file]{padding:9px;border-style:dashed;color:#9aa6ba}
+</style>
+<style>
+.studioTop{display:flex;justify-content:space-between;gap:18px;align-items:end}.progressWrap{min-width:150px;text-align:right}.progress{height:7px;background:#171c29;border-radius:99px;overflow:hidden}.progress i{display:block;height:100%;width:0;background:linear-gradient(90deg,#8b5cf6,#22d3ee);transition:.3s}.progressWrap span{font-size:11px;color:#7f8ba1}
+.quickTemplates{display:flex;gap:7px;flex-wrap:wrap;margin:18px 0}.templateBtn{border:1px solid #293348;background:#0a0e17;color:#cbd5e1;border-radius:9px;padding:8px 10px;cursor:pointer}.templateBtn:hover{border-color:#8b5cf6;color:#fff}
+.previewToolbar{display:flex;justify-content:space-between;align-items:center;padding:10px 13px;background:#0b0f18;border-bottom:1px solid #20283a;color:#94a3b8;font-size:12px}
+.previewDot{width:8px;height:8px;border-radius:50%;display:inline-block;background:#4ade80;margin-right:6px}
+.emptyPreview{display:grid;place-items:center;min-height:500px;color:#6b7280;text-align:center;padding:30px}
+.emptyPreview b{color:#cbd5e1;display:block;font-size:20px;margin-bottom:8px}
+.fieldHint{font-size:10px;color:#68758a;margin-top:5px}
+@media(max-width:850px){.studioTop{display:block}.progressWrap{text-align:left;margin-top:14px}}
+</style>
+
+<style>
+.label{font-size:11px;color:#8195ae;text-transform:uppercase;letter-spacing:1.2px;font-weight:800}.salesPanel{overflow:hidden;position:relative}.salesPanel:after{content:"";position:absolute;right:-80px;top:-100px;width:240px;height:240px;border-radius:50%;background:radial-gradient(circle,rgba(34,211,238,.12),transparent 68%);pointer-events:none}.salesHead{display:flex;justify-content:space-between;align-items:flex-start;gap:15px}.salesPeriod{color:#8290a5;font-size:12px;border:1px solid #ffffff10;border-radius:99px;padding:7px 10px}.salesMetrics{display:flex;gap:45px;flex-wrap:wrap;margin:25px 0}.salesMetrics span{display:block;color:#8195ae;font-size:12px}.salesMetrics b{display:block;font-size:27px;margin-top:5px;letter-spacing:-.5px}.salesBar{height:12px;border-radius:99px;background:#171d2b;overflow:hidden}.salesBar i{display:block;height:100%;width:0;border-radius:99px;background:linear-gradient(90deg,#8b5cf6,#22d3ee);box-shadow:0 0 18px rgba(34,211,238,.28);transition:width .35s ease}.salesRow{display:flex;justify-content:space-between;gap:15px;margin-top:10px;color:#8797ac;font-size:12px}.salesControls{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:22px}.salesControls label{margin:0;color:#9aa8bc;font-size:11px}.salesControls input{margin-top:6px}.salesFoot{display:flex;justify-content:space-between;align-items:center;margin-top:16px;color:#9aa8bc;font-size:12px}.salesFoot strong{color:#8de3aa}.salesComplete .salesBar i{box-shadow:0 0 28px rgba(34,211,238,.5)}
+@media(max-width:650px){.salesControls{grid-template-columns:1fr}.salesMetrics{gap:22px}.salesRow{flex-direction:column;gap:4px}}
+</style>
+
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#07101c">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+</head>
+<body>
+<header>
+<div class="logo">ZYR<span>ON</span></div>
+<nav>
+<button onclick="go('home')">Início</button><button onclick="go('dashboard')">Dashboard</button>
+<button onclick="go('studio')">Zyron Studio</button>
+<button onclick="go('messages')">Mensagens</button>
+<button onclick="go('projects')">Projetos</button><button onclick="go('plans')">Planos</button><button onclick="go('search')">Buscar empresas</button>
+</nav>
+</header>
+
+<main class="container">
+<section id="home">
+<div class="hero">
+<span class="badge">✦ ZYRON STUDIO · PRIVATE WORKSPACE</span>
+<h1>Transforme empresas em <span class="gradient">sites profissionais.</span></h1>
+<p>Encontre empresas no mundo inteiro, crie demonstrações personalizadas e faça sua oferta — tudo dentro do seu espaço de trabalho.</p>
+<div class="actions"><button class="btn primary" onclick="go('studio')">Criar um site</button><button class="btn secondary" onclick="go('messages')">Ver mensagens</button></div>
+</div>
+
+<div class="cards" style="margin:0 0 55px">
+<div class="card"><div class="ico">🌎</div><h3>Prospecção global</h3><p>Região, país, cidade e segmento para encontrar oportunidades.</p></div>
+<div class="card"><div class="ico">✨</div><h3>Sites personalizados</h3><p>Foto, cor, conteúdo e identidade visual para cada cliente.</p></div>
+<div class="card"><div class="ico">⚡</div><h3>Venda mais rápido</h3><p>Mensagens prontas e um fluxo organizado de proposta.</p></div>
+</div>
+<div class="section">
+<div class="title"><h2>Escolha o segmento</h2><p>A Zyron foi pensada para vários tipos de empresas.</p></div>
+<div class="cards">
+<div class="card"><div class="ico">🏋️</div><h3>Academias</h3><p>Planos, modalidades, horários, fotos e contato.</p></div>
+<div class="card"><div class="ico">🏪</div><h3>Lojas</h3><p>Catálogo, produtos, localização e atendimento.</p></div>
+<div class="card"><div class="ico">🍔</div><h3>Restaurantes</h3><p>Cardápio, fotos, horários, endereço e pedidos.</p></div>
+<div class="card"><div class="ico">🐶</div><h3>Pet shops</h3><p>Serviços, produtos, fotos e WhatsApp.</p></div>
+<div class="card"><div class="ico">💈</div><h3>Barbearias</h3><p>Serviços, preços, profissionais e agendamento.</p></div>
+<div class="card"><div class="ico">💅</div><h3>Salões de beleza</h3><p>Serviços, portfólio, equipe e contato.</p></div>
+<div class="card"><div class="ico">🚗</div><h3>Oficinas</h3><p>Serviços automotivos, localização e orçamento.</p></div>
+<div class="card"><div class="ico">🦷</div><h3>Clínicas</h3><p>Serviços, equipe, horários e informações.</p></div>
+<div class="card"><div class="ico">📚</div><h3>Cursos</h3><p>Turmas, cursos, professores e inscrição.</p></div>
+<div class="card"><div class="ico">🏠</div><h3>Imobiliárias</h3><p>Imóveis, fotos, contato e atendimento.</p></div>
+<div class="card"><div class="ico">⚽</div><h3>Esportes</h3><p>Atividades, horários, planos e inscrições.</p></div>
+<div class="card"><div class="ico">💼</div><h3>Empresas</h3><p>Apresentação, serviços, equipe e contato.</p></div>
+</div>
+</div>
+</section>
+
+<section id="studio" class="hidden">
+<div class="hero"><span class="badge">✦ ZYRON STUDIO · SITE BUILDER</span><h1>Monte a demonstração do cliente.</h1><p>Adicione informações e uma imagem para deixar o site mais bonito e profissional.</p></div>
+<div class="editor">
+<div class="panel">
+<div class="studioTop">
+  <div>
+    <span class="badge">✦ CONSTRUTOR ZYRON</span>
+    <h2 style="margin:12px 0 4px">Montar o site</h2>
+    <p class="small">Crie uma demonstração convincente em poucos passos.</p>
+  </div>
+  <div class="progressWrap"><div class="progress"><i id="studioProgress"></i></div><span id="progressText">0%</span></div>
+</div>
+<div class="quickTemplates">
+  <button class="templateBtn" onclick="applyTemplate('academia')">🏋️ Academia</button>
+  <button class="templateBtn" onclick="applyTemplate('loja')">🛍️ Loja</button>
+  <button class="templateBtn" onclick="applyTemplate('restaurante')">🍽️ Restaurante</button>
+  <button class="templateBtn" onclick="applyTemplate('clinica')">🩺 Clínica</button>
+</div>
+<p class="small">Organize as informações do cliente de um jeito simples e profissional.</p>
+
+<div class="infoGroup">
+<div class="infoTitle"><span>🏢</span><div><b>Identidade da empresa</b><small>Nome e segmento</small></div></div>
+<label>Nome da empresa</label><input id="name" placeholder="Ex.: Academia Força Total">
+<label>Segmento</label><select id="type"><option>Academia</option><option>Loja</option><option>Restaurante</option><option>Pet shop</option><option>Barbearia</option><option>Salão de beleza</option><option>Oficina</option><option>Clínica</option><option>Curso</option><option>Imobiliária</option><option>Esportes</option><option>Empresa</option><option>Outro</option></select>
+</div>
+
+<div class="infoGroup">
+<div class="infoTitle"><span>✨</span><div><b>Apresentação</b><small>O conteúdo principal da página</small></div></div>
+<label>Título de destaque</label><input id="headline" placeholder="Ex.: Seu treino começa hoje">
+<label>Descrição curta</label><textarea id="desc" placeholder="Explique em poucas palavras o que a empresa oferece."></textarea>
+<label>Texto do botão</label><input id="cta" placeholder="Ex.: Agendar agora">
+</div>
+
+<div class="infoGroup">
+<div class="infoTitle"><span>⭐</span><div><b>Serviços e diferenciais</b><small>Mostre por que o cliente deve escolher a empresa</small></div></div>
+<label>Principais serviços ou produtos</label><textarea id="services" placeholder="Ex.: Musculação, funcional, personal, avaliação física..."></textarea>
+<label>Diferencial da empresa</label><textarea id="differential" placeholder="Ex.: Atendimento personalizado, entrega rápida, ambiente moderno..."></textarea>
+</div>
+
+<div class="infoGroup">
+<div class="infoTitle"><span>📍</span><div><b>Contato</b><small>Informações para o visitante</small></div></div>
+<label>WhatsApp</label><input id="phone" placeholder="Ex.: +55 11 99999-9999">
+<label>Endereço</label><input id="address" placeholder="Ex.: Rua Principal, 100 — São Paulo">
+</div>
+
+<div class="infoGroup">
+<div class="infoTitle"><span>🖼️</span><div><b>Imagem principal</b><small>Escolha uma foto para o destaque</small></div></div>
+<label>Foto do destaque</label><input id="photo" type="file" accept="image/*">
+</div>
+
+<button class="btn primary full" onclick="generate()">Gerar demonstração</button>
+<button class="btn secondary full" onclick="saveProject()">💾 Salvar projeto</button><button class="btn secondary full" onclick="copyProjectSummary()">📋 Copiar resumo do projeto</button>
+<div class="notice">💡 <b>Pronto para vender?</b> Gere a demonstração, salve o projeto e depois abra “Mensagens” para preparar a abordagem.</div><button class="btn secondary full" onclick="go('messages')">💬 Preparar oferta</button>
+</div>
+<div class="panel"><div class="notice">💡 <b>Dica:</b> use uma foto real do negócio e a cor da marca para deixar a demonstração mais convincente.</div><div id="preview" class="preview" style="margin-top:12px">
+<div class="preview-head"><div class="preview-logo">SUA EMPRESA</div><div class="preview-nav">Início &nbsp; Serviços &nbsp; Sobre &nbsp; Contato</div></div>
+<div class="hero-img"><div><h2>Seu site começa aqui.</h2><p>Adicione os dados da empresa e uma foto para gerar uma demonstração personalizada.</p><span class="site-btn">Falar no WhatsApp</span></div></div>
+<div class="site-grid"><div class="site-box"><b>Serviços</b><p>Mostre os principais serviços ou produtos.</p></div><div class="site-box"><b>Sobre</b><p>Conte a história e os diferenciais da empresa.</p></div><div class="site-box"><b>Contato</b><p>WhatsApp, endereço e horários.</p></div></div>
+</div></div>
+</div>
+</section>
+
+<section id="messages" class="hidden">
+<div class="hero"><span class="badge">Mensagens Zyron</span><h1>Pronto para fazer a oferta.</h1><p>Escolha uma mensagem, personalize os campos e copie para enviar ao cliente.</p></div>
+<div class="msgs">
+<div class="msg"><h3>👋 Primeiro contato</h3><textarea id="m1">Olá, [NOME]. Tudo bem? Somos da Zyron e trabalhamos com criação de sites profissionais para empresas. Preparei uma demonstração de como o site da [EMPRESA] poderia ficar. Posso te apresentar?</textarea><button class="btn secondary copy" onclick="copyMsg('m1')">Copiar mensagem</button></div>
+<div class="msg"><h3>🖥️ Apresentar o site</h3><textarea id="m2">Olá, [NOME]! Preparei uma demonstração personalizada para a [EMPRESA], com informações, imagens e contato. Se você gostar, podemos finalizar o projeto e entregar o site para sua empresa.</textarea><button class="btn secondary copy" onclick="copyMsg('m2')">Copiar mensagem</button></div>
+<div class="msg"><h3>💰 Enviar proposta</h3><textarea id="m3">A proposta para o site da [EMPRESA] é de R$ [VALOR]. O projeto inclui a estrutura combinada, adaptação para celular e os ajustes previstos no pacote. Se quiser, podemos começar após a confirmação.</textarea><button class="btn secondary copy" onclick="copyMsg('m3')">Copiar mensagem</button></div>
+<div class="msg"><h3>🔁 Acompanhamento</h3><textarea id="m4">Olá, [NOME]! Passando para saber se conseguiu ver a demonstração do site da [EMPRESA]. Se tiver alguma dúvida ou quiser alterar alguma parte, posso te explicar como podemos ajustar o projeto.</textarea><button class="btn secondary copy" onclick="copyMsg('m4')">Copiar mensagem</button></div>
+<div class="msg"><h3>✅ Cliente aceitou</h3><textarea id="m5">Ótimo, [NOME]! Obrigado pela confiança na Zyron. Vamos seguir com o projeto da [EMPRESA]. Vou confirmar os detalhes, prazo e próximos passos para começarmos.</textarea><button class="btn secondary copy" onclick="copyMsg('m5')">Copiar mensagem</button></div>
+<div class="msg"><h3>📦 Entrega</h3><textarea id="m6">Olá, [NOME]! O site da [EMPRESA] está pronto para sua revisão. Confira a demonstração e me envie os ajustes que você gostaria de fazer dentro do combinado.</textarea><button class="btn secondary copy" onclick="copyMsg('m6')">Copiar mensagem</button></div>
+</div>
+</section>
+
+
+
+<section id="dashboard" class="hidden">
+<div class="hero"><span class="badge">📊 Seu painel</span><h1>Tudo da Zyron em um só lugar.</h1><p>Acompanhe demonstrações, propostas e projetos sem precisar sair da plataforma.</p></div>
+<div class="cards">
+<div class="card"><div class="ico">🏢</div><h3 id="statProjects">0</h3><p>Projetos salvos</p></div>
+<div class="card"><div class="ico">🖥️</div><h3 id="statSites">0</h3><p>Sites criados nesta sessão</p></div>
+<div class="card"><div class="ico">💬</div><h3>6</h3><p>Modelos de mensagens</p></div>
+<div class="card"><div class="ico">🌎</div><h3>Global</h3><p>Prospecção internacional</p></div>
+</div>
+<div class="panel salesPanel" style="margin-top:20px">
+  <div class="salesHead"><div><span class="label">Performance comercial</span><h2 style="margin:7px 0 0">🎯 Meta de vendas</h2></div><span class="salesPeriod">Meta mensal</span></div>
+  <div class="salesMetrics">
+    <div><span>Receita atual</span><b id="salesCurrent">R$ 0</b></div>
+    <div><span>Meta</span><b id="salesTarget">R$ 10.000</b></div>
+    <div><span>Progresso</span><b id="salesPercent">0%</b></div>
+  </div>
+  <div class="salesBar"><i id="salesBarFill"></i></div>
+  <div class="salesRow"><span id="salesReached">R$ 0 alcançados</span><span id="salesRemaining">R$ 10.000 restantes</span></div>
+  <div class="salesControls">
+    <label>Vendas acumuladas (R$)<input id="salesInput" type="number" min="0" step="0.01" placeholder="0" oninput="updateSales(this.value)"></label>
+    <label>Meta (R$)<input id="salesTargetInput" type="number" min="1" step="0.01" value="10000" oninput="updateSalesTarget(this.value)"></label>
+  </div>
+  <div class="salesFoot"><span id="salesStatus">Em evolução</span><strong id="salesCelebration"></strong></div>
+</div>
+<div class="panel" style="margin-top:20px"><h2>Fluxo da Zyron</h2><div class="cards">
+<div class="card"><b>1. Encontrar</b><p>Pesquise empresas por região, país e segmento.</p></div>
+<div class="card"><b>2. Criar</b><p>Monte uma demonstração com foto, cor e conteúdo.</p></div>
+<div class="card"><b>3. Oferecer</b><p>Use uma mensagem pronta e apresente o projeto.</p></div>
+<div class="card"><b>4. Entregar</b><p>Após fechar, finalize e entregue o site.</p></div>
+</div></div>
+</section>
+
+<section id="projects" class="hidden">
+<div class="hero"><span class="badge">📁 Projetos</span><h1>Seus projetos da Zyron.</h1><p>Salve as demonstrações que você está preparando para possíveis clientes.</p></div>
+<div class="panel">
+<div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:space-between;align-items:center">
+<h2 style="margin:0">Projetos salvos</h2><button class="btn primary" onclick="go('studio')">+ Novo projeto</button>
+</div>
+<div id="projectList" class="cards" style="margin-top:18px"></div>
+</div>
+</section>
+
+<section id="search" class="hidden">
+<div class="hero"><span class="badge">🌎 Busca global</span><h1>Encontre empresas em qualquer lugar.</h1><p>Pesquise por país, cidade e segmento para encontrar possíveis clientes da Zyron.</p></div>
+<div class="editor" style="grid-template-columns:320px 1fr">
+<div class="panel">
+<h2>Filtros de busca</h2>
+<label>Região</label>
+<select id="region" onchange="updateCountries()"><option value="">Todas as regiões</option><option value="África">África</option><option value="América do Norte">América do Norte</option><option value="América Central e Caribe">América Central e Caribe</option><option value="América do Sul">América do Sul</option><option value="Europa">Europa</option><option value="Ásia">Ásia</option><option value="Oceania">Oceania</option><option value="Oriente Médio">Oriente Médio</option></select>
+<label>País</label>
+<select id="country" onchange="updateCities()"><option value="">Todos os países</option></select>
+<label>Cidade / estado / província</label>
+<select id="city"><option value="">Todas as cidades/regiões</option></select>
+<label>Segmento</label><select id="searchType">
+<option>Academias</option><option>Lojas</option><option>Restaurantes</option><option>Pet shops</option><option>Barbearias</option><option>Salões de beleza</option><option>Oficinas</option><option>Clínicas</option><option>Cursos</option><option>Imobiliárias</option><option>Empresas</option>
+</select>
+<label>Idioma da abordagem</label><select id="language"><option>Português</option><option>English</option><option>Español</option><option>Français</option></select>
+<button class="btn primary full" onclick="searchCompanies()">Pesquisar empresas</button>
+<div class="small" style="margin-top:12px">Nesta versão de demonstração, o botão abre uma pesquisa na web. Para buscas automáticas em escala, a Zyron precisará de uma API/backend de pesquisa e regras de uso.</div>
+</div>
+<div class="panel">
+<h2>Resultados / prospecção</h2>
+<div class="notice">🚀 Fluxo Zyron: escolha a região → abra o Maps → encontre uma empresa → use “Criar site” → salve o projeto → envie a oferta.</div>
+<div id="prospectActions" style="margin-top:14px"></div><div class="notice">📍 O Google Maps será aberto usando exatamente a região, país, cidade e segmento selecionados.</div>
+<div id="results" class="cards" style="grid-template-columns:1fr">
+<div class="card"><div class="ico">🌍</div><h3>Pronto para pesquisar</h3><p>Escolha país, região e segmento. A Zyron poderá usar esses dados para encontrar potenciais clientes.</p></div>
+</div>
+</div>
+</div>
+</section>
+
+<section id="plans" class="hidden">
+<div class="hero"><span class="badge">Planos Zyron</span><h1>Preços simples para começar.</h1><p>Valores iniciais para a oferta comercial; podem ser ajustados conforme o projeto.</p></div>
+<div class="cards">
+<div class="card"><h2>Start</h2><div class="price">R$149</div><p>Até 3 páginas, celular, contato, localização e estrutura básica.</p></div>
+<div class="card" style="border-color:rgba(139,92,246,.55);box-shadow:0 0 45px rgba(139,92,246,.12)"><span class="badge">MAIS ESCOLHIDO</span><h2 style="margin-top:14px">Pro</h2><div class="price">R$299</div><p>Até 5 páginas, design personalizado, fotos, galeria e catálogo.</p></div>
+<div class="card"><h2>Business</h2><div class="price">R$499+</div><p>Recursos personalizados, integrações simples e maior personalização.</p></div>
+</div>
+</section>
+</main>
+<footer>© 2026 Zyron · Seu workspace privado para criação e prospecção.</footer>
+<script>
+function go(id){['home','dashboard','studio','messages','projects','plans','search'].forEach(x=>document.getElementById(x).classList.toggle('hidden',x!==id));scrollTo({top:0,behavior:'smooth'})}
+function esc(s){return s.replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])||m)}
+function generate(){ updateStudioProgress();
+ const n=esc(document.getElementById('name').value.trim()||'Sua empresa'),t=esc(document.getElementById('type').value),h=esc(document.getElementById('headline').value.trim()||'Transforme sua presença digital'),d=esc(document.getElementById('desc').value.trim()||'Apresente seus serviços e conquiste novos clientes.'),s=esc(document.getElementById('services').value.trim()||'Serviços e produtos'),p=esc(document.getElementById('phone').value.trim()||'WhatsApp'),a=esc(document.getElementById('address').value.trim()||'Sua localização'),cta=esc(document.getElementById('cta').value.trim()||'Falar no WhatsApp'),diff=esc(document.getElementById('differential')?.value.trim()||'Atendimento pensado para cada cliente');
+ sessionStorage.setItem('zyron_sites',String((Number(sessionStorage.getItem('zyron_sites')||0)+1)));
+ refreshStats();
+ const f=document.getElementById('photo').files[0];
+ const render=(url)=>{document.getElementById('preview').innerHTML=`<div class="preview-head"><div class="preview-logo">${n}</div><div class="preview-nav">Início &nbsp; Serviços &nbsp; Sobre &nbsp; Contato</div></div><div class="hero-img" style="background-image:linear-gradient(90deg,rgba(6,10,20,.78),rgba(6,10,20,.15)),url('${url}')"><div class="siteHeroText"><span class="siteTag">${t}</span><h2>${h}</h2><p>${d}</p><span class="site-btn" style="background:#7b61ff">${cta}</span></div></div><div class="site-grid"><div class="site-box"><b>Serviços</b><p>${s}</p></div><div class="site-box"><b>Diferencial</b><p>${diff}</p></div><div class="site-box"><b>Localização</b><p>${a}</p></div><div class="site-box"><b>Contato</b><p>${p}</p></div></div>`};
+ if(f){const r=new FileReader();r.onload=e=>render(e.target.result);r.readAsDataURL(f)}else render('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=1400&q=80');
+}
+async function copyMsg(id){try{await navigator.clipboard.writeText(document.getElementById(id).value);alert('Mensagem copiada!')}catch(e){alert('Selecione e copie a mensagem manualmente.')}}
+
+
+const PROJECT_KEY='zyron_projects_v1';
+function getProjects(){try{return JSON.parse(localStorage.getItem(PROJECT_KEY)||'[]')}catch(e){return[]}}
+function getSales(){try{return JSON.parse(localStorage.getItem('zyron_sales_v1')||'{"current":0,"target":10000}')}catch(e){return{current:0,target:10000}}}
+function saveSales(v){localStorage.setItem('zyron_sales_v1',JSON.stringify(v))}
+function moneyBR(v){return Number(v||0).toLocaleString('pt-BR',{style:'currency',currency:'BRL',maximumFractionDigits:2})}
+function updateSales(value){const x=getSales();x.current=Math.max(0,Number(value)||0);saveSales(x);renderSales()}
+function updateSalesTarget(value){const x=getSales();x.target=Math.max(1,Number(value)||1);saveSales(x);renderSales()}
+function renderSales(){const x=getSales();const pct=Math.min(100,Math.round((x.current/x.target)*100));const remaining=Math.max(0,x.target-x.current);const c=document.getElementById('salesCurrent');if(!c)return;c.textContent=moneyBR(x.current);document.getElementById('salesTarget').textContent=moneyBR(x.target);document.getElementById('salesPercent').textContent=pct+'%';document.getElementById('salesBarFill').style.width=pct+'%';document.getElementById('salesReached').textContent=moneyBR(x.current)+' alcançados';document.getElementById('salesRemaining').textContent=remaining?moneyBR(remaining)+' restantes':'Meta alcançada';document.getElementById('salesStatus').textContent=pct>=100?'Meta concluída 🏆':pct>=75?'Quase lá — reta final':'Em evolução';document.getElementById('salesCelebration').textContent=pct>=100?'🎉 Meta batida!':'';document.getElementById('salesInput').value=x.current||'';document.getElementById('salesTargetInput').value=x.target;document.querySelector('.salesPanel')?.classList.toggle('salesComplete',pct>=100)}
+function refreshStats(){const p=getProjects();document.getElementById('statProjects').textContent=p.length;document.getElementById('statSites').textContent=sessionStorage.getItem('zyron_sites')||0;renderSales()}
+function renderProjects(){
+ const list=document.getElementById('projectList'); if(!list)return;
+ const p=getProjects();
+ if(!p.length){list.innerHTML='<div class="card"><div class="ico">📁</div><h3>Nenhum projeto salvo</h3><p>Crie uma demonstração e clique em “Salvar projeto”.</p></div>';return}
+ list.innerHTML=p.map((x,i)=>`<div class="card"><div class="ico">🖥️</div><h3>${esc(x.name)}</h3><p>${esc(x.type)} · ${esc(x.country||'Local não informado')}</p><p class="small">${new Date(x.created).toLocaleString('pt-BR')}</p><button class="btn secondary" onclick="loadProject(${i})">Abrir</button> <button class="btn secondary" onclick="deleteProject(${i})">Excluir</button></div>`).join('');
+}
+
+function copyProjectSummary(){
+ const name=document.getElementById('name')?.value.trim()||'Empresa';
+ const type=document.getElementById('type')?.value||'Negócio';
+ const text=`Demonstração Zyron — ${name}\nSegmento: ${type}\nTítulo: ${document.getElementById('headline')?.value||''}\nServiços: ${document.getElementById('services')?.value||''}\nDiferencial: ${document.getElementById('differential')?.value||''}\nContato: ${document.getElementById('phone')?.value||''}`;
+ navigator.clipboard?.writeText(text).then(()=>alert('Resumo copiado!')).catch(()=>alert(text));
+}
+function saveProject(){
+ const name=document.getElementById('name').value.trim(); if(!name){alert('Coloque o nome da empresa primeiro.');return}
+ const p=getProjects();
+ p.unshift({name,type:document.getElementById('type').value,headline:document.getElementById('headline').value,desc:document.getElementById('desc').value,services:document.getElementById('services').value,differential:document.getElementById('differential')?.value||'',phone:document.getElementById('phone').value,address:document.getElementById('address').value,country:document.getElementById('country')?.value||'',created:Date.now()});
+ localStorage.setItem(PROJECT_KEY,JSON.stringify(p.slice(0,50))); refreshStats(); renderProjects(); alert('Projeto salvo nesta versão da Zyron!');
+}
+function loadProject(i){
+ const x=getProjects()[i]; if(!x)return;
+ go('studio');
+ for(const id of ['name','headline','desc','services','differential','phone','address']) if(document.getElementById(id)) document.getElementById(id).value=x[id]||'';
+ if(document.getElementById('type'))document.getElementById('type').value=x.type||'Empresa';
+ generate();
+}
+function deleteProject(i){const p=getProjects();p.splice(i,1);localStorage.setItem(PROJECT_KEY,JSON.stringify(p));refreshStats();renderProjects()}
+
+const DATA_COUNTRIES={"África": ["África do Sul", "Angola", "Argélia", "Benim", "Botsuana", "Burkina Faso", "Burundi", "Cabo Verde", "Camarões", "Chade", "Comores", "Costa do Marfim", "Djibuti", "Egito", "Eritreia", "Essuatíni", "Etiópia", "Gabão", "Gâmbia", "Gana", "Guiné", "Guiné-Bissau", "Guiné Equatorial", "Lesoto", "Libéria", "Líbia", "Madagascar", "Maláui", "Mali", "Marrocos", "Maurício", "Mauritânia", "Moçambique", "Namíbia", "Níger", "Nigéria", "Quênia", "República Centro-Africana", "República Democrática do Congo", "República do Congo", "Ruanda", "São Tomé e Príncipe", "Senegal", "Serra Leoa", "Seicheles", "Somália", "Sudão", "Sudão do Sul", "Tanzânia", "Togo", "Tunísia", "Uganda", "Zâmbia", "Zimbábue"], "América do Norte": ["Canadá", "Estados Unidos", "México"], "América Central e Caribe": ["Antígua e Barbuda", "Bahamas", "Barbados", "Belize", "Costa Rica", "Cuba", "Dominica", "El Salvador", "Granada", "Guatemala", "Haiti", "Honduras", "Jamaica", "Nicarágua", "Panamá", "República Dominicana", "Santa Lúcia", "São Cristóvão e Névis", "São Vicente e Granadinas", "Trinidad e Tobago"], "América do Sul": ["Argentina", "Bolívia", "Brasil", "Chile", "Colômbia", "Equador", "Guiana", "Paraguai", "Peru", "Suriname", "Uruguai", "Venezuela"], "Europa": ["Albânia", "Alemanha", "Andorra", "Armênia", "Áustria", "Azerbaijão", "Bélgica", "Belarus", "Bósnia e Herzegovina", "Bulgária", "Chipre", "Croácia", "Dinamarca", "Eslováquia", "Eslovênia", "Espanha", "Estônia", "Finlândia", "França", "Geórgia", "Grécia", "Hungria", "Irlanda", "Islândia", "Itália", "Letônia", "Liechtenstein", "Lituânia", "Luxemburgo", "Malta", "Moldávia", "Mônaco", "Montenegro", "Macedônia do Norte", "Noruega", "Países Baixos", "Polônia", "Portugal", "Reino Unido", "República Tcheca", "Romênia", "Rússia", "San Marino", "Sérvia", "Suécia", "Suíça", "Turquia", "Ucrânia", "Vaticano"], "Ásia": ["Afeganistão", "Arábia Saudita", "Bahrein", "Bangladesh", "Butão", "Brunei", "Camboja", "Catar", "Cazaquistão", "China", "Coreia do Norte", "Coreia do Sul", "Emirados Árabes Unidos", "Filipinas", "Índia", "Indonésia", "Irã", "Iraque", "Israel", "Japão", "Jordânia", "Kuwait", "Laos", "Líbano", "Malásia", "Maldivas", "Mongólia", "Myanmar", "Nepal", "Omã", "Paquistão", "Quirguistão", "Singapura", "Síria", "Sri Lanka", "Tadjiquistão", "Tailândia", "Timor-Leste", "Turcomenistão", "Uzbequistão", "Vietnã", "Iêmen"], "Oceania": ["Austrália", "Fiji", "Ilhas Marshall", "Ilhas Salomão", "Kiribati", "Micronésia", "Nauru", "Nova Zelândia", "Palau", "Papua-Nova Guiné", "Samoa", "Tonga", "Tuvalu", "Vanuatu"], "Oriente Médio": ["Arábia Saudita", "Bahrein", "Catar", "Emirados Árabes Unidos", "Iêmen", "Iraque", "Irã", "Israel", "Jordânia", "Kuwait", "Líbano", "Omã", "Síria", "Turquia"]};
+function updateCountries(){
+ const region=document.getElementById('region').value;
+ const data=DATA_COUNTRIES;
+ const all=[...new Set(Object.values(data).flat())].sort((a,b)=>a.localeCompare(b,'pt-BR'));
+ const list=region?(data[region]||[]):all;
+ document.getElementById('country').innerHTML='<option value="">Todos os países</option>'+list.map(x=>'<option>'+x+'</option>').join('');
+ updateCities();
+}
+function updateCities(){
+ const country=document.getElementById('country').value;
+ const cities={
+ "Brasil":["São Paulo","Rio de Janeiro","Brasília","Belo Horizonte","Curitiba","Porto Alegre","Salvador","Recife"],
+ "Portugal":["Lisboa","Porto","Braga","Coimbra","Faro"],
+ "Estados Unidos":["New York","Los Angeles","Miami","Orlando","Chicago","Houston","San Francisco"],
+ "Canadá":["Toronto","Vancouver","Montreal","Calgary"],
+ "México":["Cidade do México","Guadalajara","Monterrey","Cancún"],
+ "Espanha":["Madrid","Barcelona","Valência","Sevilha"],
+ "França":["Paris","Lyon","Marselha","Nice"],
+ "Itália":["Roma","Milão","Nápoles","Turim"],
+ "Reino Unido":["Londres","Manchester","Liverpool","Birmingham"],
+ "Alemanha":["Berlim","Munique","Hamburgo","Frankfurt"],
+ "Japão":["Tóquio","Osaka","Kyoto","Yokohama"],
+ "China":["Pequim","Xangai","Shenzhen","Guangzhou"],
+ "Austrália":["Sydney","Melbourne","Brisbane","Perth"]
+ };
+ const list=cities[country]||[];
+ document.getElementById('city').innerHTML='<option value="">Todas as cidades/regiões</option>'+list.map(x=>`<option>${x}</option>`).join('');
+}
+function searchCompanies(){
+ const region=document.getElementById('region').value;
+ const country=document.getElementById('country').value;
+ const city=document.getElementById('city').value;
+ const type=document.getElementById('searchType').value;
+ const place=[city,country,region].filter(Boolean).join(', ')||'qualquer região';
+ const q=encodeURIComponent(`${type} ${place} empresas contato site`);
+ const url=`https://www.google.com/search?q=${q}`;
+ document.getElementById('results').innerHTML=`<div class="card"><div class="ico">🌎</div><h3>Pesquisa preparada</h3><p>Segmento: <b>${esc(type)}</b><br>Localização: <b>${esc(place)}</b></p><button class="btn primary" onclick="window.open('${url}','_blank')">🔎 Pesquisar empresas</button>
+<button class="btn secondary" onclick="openMaps()">📍 Abrir no Google Maps</button>
+<button class="btn secondary" onclick="startProspect()">🏢 Cadastrar empresa encontrada</button></div>`;
+}
+
+refreshStats();renderProjects();updateCountries();updateStudioProgress();
+
+
+function startProspect(){
+ const country=document.getElementById('country')?.value||'';
+ const city=document.getElementById('city')?.value||'';
+ const type=document.getElementById('searchType')?.value||'Empresa';
+ document.getElementById('prospectActions').innerHTML=`
+ <div class="card">
+ <h3>🏢 Nova empresa encontrada</h3>
+ <p class="small">Preencha os dados que você encontrou no Google Maps. A Zyron usará essas informações para montar a demonstração.</p>
+ <label>Nome da empresa</label><input id="prospectName" placeholder="Nome da empresa">
+ <label>Telefone / WhatsApp</label><input id="prospectPhone" placeholder="Telefone">
+ <label>Endereço</label><input id="prospectAddress" value="${esc([city,country].filter(Boolean).join(', '))}" placeholder="Endereço">
+ <label>Site atual</label><input id="prospectWebsite" placeholder="https://...">
+ <label>Observações</label><textarea id="prospectNotes" placeholder="O que você percebeu sobre a empresa?"></textarea>
+ <button class="btn primary full" onclick="useProspect()">🖥️ Criar demonstração na Zyron</button>
+ </div>`;
+}
+function useProspect(){
+ const name=document.getElementById('prospectName').value.trim();
+ if(!name){alert('Digite o nome da empresa.');return}
+ go('studio');
+ document.getElementById('name').value=name;
+ document.getElementById('type').value=document.getElementById('searchType').value;
+ document.getElementById('phone').value=document.getElementById('prospectPhone').value;
+ document.getElementById('address').value=document.getElementById('prospectAddress').value;
+ document.getElementById('desc').value=document.getElementById('prospectNotes').value;
+ document.getElementById('headline').value='Uma presença digital profissional para '+name;
+ document.getElementById('services').value='Serviços e produtos da empresa';
+}
+
+function applyTemplate(kind){
+ const t={
+ academia:{type:'Academia',headline:'Seu próximo nível começa aqui',desc:'Treinos, acompanhamento e estrutura para você alcançar seus objetivos.',cta:'Agendar aula',services:'Musculação, funcional, personal e avaliação física',differential:'Equipe especializada e atendimento personalizado.'},
+ loja:{type:'Loja',headline:'Encontre seus favoritos',desc:'Produtos selecionados, atendimento próximo e uma experiência simples para comprar.',cta:'Ver produtos',services:'Produtos em destaque, novidades e ofertas',differential:'Atendimento rápido e experiência de compra personalizada.'},
+ restaurante:{type:'Restaurante',headline:'Sabor que você vai querer repetir',desc:'Conheça nosso cardápio e faça seu pedido ou reserve sua mesa.',cta:'Ver cardápio',services:'Pratos, bebidas, sobremesas e delivery',differential:'Ingredientes selecionados e atendimento especial.'},
+ clinica:{type:'Clínica',headline:'Cuidado que começa com você',desc:'Atendimento profissional em um ambiente acolhedor e preparado.',cta:'Agendar atendimento',services:'Consultas, avaliações e acompanhamento',differential:'Atendimento humanizado e profissionais qualificados.'}
+ }[kind];
+ if(!t)return;
+ for(const id of ['type','headline','desc','cta','services','differential']){if(document.getElementById(id))document.getElementById(id).value=t[id]||''}
+ updateStudioProgress(); generate();
+}
+function updateStudioProgress(){
+ const ids=['name','type','headline','desc','cta','services','differential','phone','address'];
+ const filled=ids.filter(id=>{const e=document.getElementById(id);return e&&String(e.value||'').trim()}).length;
+ const pct=Math.round(filled/ids.length*100);
+ const bar=document.getElementById('studioProgress'),txt=document.getElementById('progressText');
+ if(bar)bar.style.width=pct+'%'; if(txt)txt.textContent=pct+'%';
+}
+document.addEventListener('input',e=>{if(e.target.closest('#studio'))updateStudioProgress()});
+function openMaps(){
+ const region=document.getElementById('region')?.value||'';
+ const country=document.getElementById('country')?.value||'';
+ const city=document.getElementById('city')?.value||'';
+ const type=document.getElementById('searchType')?.value||'empresas';
+ const place=[city,country,region].filter(Boolean).join(', ');
+ const query=encodeURIComponent(`${type} ${place}`.trim());
+ const mapsUrl=`https://www.google.com/maps/search/?api=1&query=${query}`;
+ window.open(mapsUrl,'_blank');
+}
+
+</script>
+
+<script>if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));}</script>
+</body></html>
