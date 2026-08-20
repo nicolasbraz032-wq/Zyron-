@@ -439,8 +439,15 @@ function openMaps(){
  const mapsUrl=`https://www.google.com/maps/search/?api=1&query=${query}`;
  window.open(mapsUrl,'_blank');
 }
+<script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("./service-worker.js")
+      .then(() => console.log("Zyron pronto para instalação!"))
+      .catch((error) => console.error("Erro:", error));
+  });
+}
 
-</script>
 
-<script>if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));}</script>
+<script>
 </body></html>
